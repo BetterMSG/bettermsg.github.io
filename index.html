@@ -1,81 +1,209 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Message ID+ — Smart Messaging & Call Protection</title>
   <meta name="description" content="Message ID+: smarter messaging, clearer caller info, stronger spam blocking." />
   <meta name="theme-color" content="#2267e6" />
+  <meta property="og:title" content="Message ID+ — Smart Messaging & Call Protection" />
+  <meta property="og:description" content="Smarter messaging, clearer caller info, stronger spam blocking." />
   <style>
     :root{
       --brand:#2267e6;
       --brand-600:#1b56c1;
       --bg:#ffffff;
+      --surface:#f8faff;
+      --text:#1a1a1a;
+      --muted:#5f6c8c;
+      --line:rgba(0,0,0,.08);
+      --radius:16px;
+      --shadow:0 6px 16px rgba(0,0,0,.08);
+      --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px; --space-12:48px;
+      --maxw:1200px;
+      --section-y:clamp(36px,7vw,56px);
+      --hero-y:clamp(56px,9vw,72px);
+      --anchor-offset:84px;
+    }
+    /* Dark theme (manual toggle) */
+    [data-theme="dark"]{
+      --bg:#060b1a;
       --surface:#0d142b;
       --text:#f0f4ff;
-      --muted:#a9b8dd;
+      --muted:#b7c4e6;
       --line:rgba(255,255,255,.08);
-      --radius:18px;
       --shadow:0 10px 25px rgba(0,0,0,.45);
     }
+    /* Respect system preference when no manual choice */
+    @media (prefers-color-scheme: dark){
+      html:not([data-theme="light"]) {
+        --bg:#060b1a; --surface:#0d142b; --text:#f0f4ff; --muted:#b7c4e6; --line:rgba(255,255,255,.08); --shadow:0 10px 25px rgba(0,0,0,.45);
+      }
+    }
+
     *{box-sizing:border-box}
     body{margin:0;font-family:"Inter",ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text);line-height:1.6}
     a{text-decoration:none;color:var(--brand)}
-    .container{width:min(1100px,92%);margin:auto}
+    a:focus-visible, .btn:focus-visible, .theme-toggle:focus-visible{outline:2px solid var(--brand-600); outline-offset:2px; box-shadow:0 0 0 3px rgba(34,103,230,.15)}
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip-link:focus{left:16px;top:16px;width:auto;height:auto;background:#fff;padding:8px 12px;border-radius:10px;box-shadow:var(--shadow)}
 
-    header{position:sticky;top:0;z-index:20;background:rgba(6,11,26,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-    .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
-    .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.1rem}
-    .logo{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-600));box-shadow:0 4px 12px rgba(34,103,230,.4)}
-    .logo svg{width:20px;height:20px;color:#fff}
-    nav ul{list-style:none;display:flex;gap:20px;margin:0;padding:0}
+    .container{width:min(var(--maxw),94%);margin:auto}
+
+    header{position:sticky;top:0;z-index:20;background:var(--bg);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.05)}
+    header .nav{position:relative}
+    .nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.1rem;color:var(--brand)}
+    .logo{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-600));box-shadow:0 4px 10px rgba(34,103,230,.3)}
+    .logo svg{width:18px;height:18px;color:#fff}
+    nav ul{list-style:none;display:flex;gap:16px;margin:0;padding:0}
     nav a{color:var(--muted);font-weight:600}
-    nav a:hover{color:var(--text)}
+    nav a:hover{color:var(--brand)}
+    nav a[aria-current="true"]{color:var(--brand);position:relative}
+    nav a[aria-current="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:currentColor;border-radius:2px;opacity:.9}
 
-    .btn{padding:10px 16px;border-radius:12px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
-    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-600));color:#fff;box-shadow:0 6px 16px rgba(34,103,230,.35)}
-    .btn.ghost{border:1px solid var(--line);color:var(--text)}
+    .menu-btn{display:none;border:1px solid var(--line);background:transparent;border-radius:10px;padding:8px 12px;font-weight:600;color:var(--brand)}
 
-    .hero{padding:80px 0 60px;display:grid;gap:40px;grid-template-columns:1fr 1fr;align-items:center}
-    h1{font-size:clamp(28px,3.5vw,46px);margin:0 0 12px}
-    .subtitle{color:var(--muted);margin:0 0 20px}
-    .bullet{display:flex;align-items:center;gap:10px;color:var(--muted);margin-bottom:10px}
+    .btn{padding:9px 14px;border-radius:12px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-600));color:#fff;box-shadow:0 4px 10px rgba(34,103,230,.3)}
+    .btn.ghost{border:1px solid var(--line);color:var(--brand);background:transparent}
+
+    .actions{display:flex;align-items:center;gap:8px}
+    .theme-toggle{border:1px solid var(--line);background:transparent;border-radius:10px;padding:6px 10px;display:inline-flex;align-items:center;gap:8px;color:var(--muted);cursor:pointer}
+    .theme-toggle svg{width:18px;height:18px;color:var(--brand)}
+
+    .hero{padding:var(--hero-y) 0 28px;display:grid;gap:28px;grid-template-columns:1.15fr 1fr;align-items:center}
+    h1{font-size:clamp(26px,3.2vw,42px);margin:0 0 8px;color:#0d142b}
+    [data-theme="dark"] h1{color:#e8eeff}
+    .subtitle{color:var(--muted);margin:0 0 14px}
+    .bullet{display:flex;align-items:center;gap:10px;color:var(--muted);margin-bottom:8px}
     .bullet svg{width:18px;height:18px;color:var(--brand)}
-    .badge{background:rgba(34,103,230,.15);color:#cfe0ff;padding:6px 12px;border-radius:999px;font-size:.85rem;display:inline-block;margin-bottom:16px}
+    .badge{background:rgba(34,103,230,.08);color:var(--brand);padding:6px 12px;border-radius:999px;font-size:.85rem;display:inline-block;margin-bottom:10px}
+    [data-theme="dark"] .badge{background:rgba(34,103,230,.15);color:#cfe0ff}
 
-    .device{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
-    .screen{background:#0a1430;border-radius:16px;border:1px solid var(--line);padding:16px;display:grid;gap:12px}
-    .chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.02);border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-    .tag{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+    .device{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);overflow:hidden}
+    .hero-art{position:absolute;inset:0;border-radius:20px;pointer-events:none;z-index:0}
+    .screen{position:relative;background:linear-gradient(180deg,#f5f8ff,#f0f4fb);border-radius:16px;border:1px solid var(--line);padding:14px;display:grid;gap:10px;z-index:1}
+    [data-theme="dark"] .screen{background:#0a1430}
+    .chip{padding:10px;border-radius:14px;background:#fff;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+    [data-theme="dark"] .chip{background:#0f1732;box-shadow:none}
+    .tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:#f8faff}
+    [data-theme="dark"] .tag{background:#0b1430}
 
-    section{padding:60px 0}
-    h2{font-size:1.7rem;margin:0 0 14px}
-    .lead{color:var(--muted);margin-bottom:20px}
-    .cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;gap:10px}
-    .card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.4)}
-    .card svg{width:28px;height:28px;color:var(--brand)}
+    .trust{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 10px;color:var(--text)}
+    .pill svg{width:18px;height:18px;color:var(--brand)}
+
+    section{padding:var(--section-y) 0}
+    section{scroll-margin-top:var(--anchor-offset)}
+    h2{font-size:1.6rem;margin:0 0 10px;color:#0d142b}
+    [data-theme="dark"] h2{color:#e8eeff}
+    .lead{color:var(--muted);margin-bottom:12px}
+    .cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:16px;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
+    .card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+    [data-theme="dark"] .card:hover{box-shadow:0 12px 28px rgba(0,0,0,.4)}
+    .card svg{width:26px;height:26px;color:var(--brand)}
+    /* Unified icon style */
+    svg.icon, .faq-icon{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .icon-circle .icon{width:20px;height:20px}
+
+
+    /* Non-box layouts */
+    .features-list{display:grid;gap:20px}
+    .feature{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px dashed var(--line)}
+    .feature:last-child{border-bottom:0}
+    .icon-circle{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-600));color:#fff;box-shadow:0 4px 10px rgba(34,103,230,.25)}
+    .feature h3{margin:2px 0 4px}
+    .feature p{margin:0;color:var(--muted)}
+
+    .split{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:center}
+    .points{display:grid;gap:10px}
+    .point{display:flex;gap:10px;align-items:flex-start}
+    .point svg{width:18px;height:18px;color:var(--brand);flex:0 0 auto}
+
+    .privacy-timeline{position:relative;display:grid;gap:16px;padding-left:12px}
+    .privacy-timeline:before{content:"";position:absolute;left:10px;top:4px;bottom:4px;width:2px;background:linear-gradient(#dbe6ff,transparent)}
+    .privacy-item{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start}
+    .privacy-item .icon-circle{width:32px;height:32px;border-radius:10px}
+    .privacy-item h3{margin:0 0 4px}
+    .privacy-item p{margin:0;color:var(--muted)}
+
+    .faq{max-width:860px}
+    .faq-item{border-bottom:1px dashed var(--line);padding:10px 0}
+    .faq-item summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700}
+    .faq-item summary::-webkit-details-marker{display:none}
+    .faq-item[open] summary{color:var(--brand)}
+    .faq-item p{margin:10px 0 14px;color:var(--muted)}
+    .faq-icon{width:24px;height:24px;color:var(--brand);flex:0 0 auto}
+
+    .muted{color:var(--muted)}
+
+    /* Steps */
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+    .step h3{display:flex;align-items:center;gap:10px;margin:0 0 6px}
+    .num{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-600));color:#fff;font-weight:800}
+
+    /* Contact form */
+    .form{display:grid;gap:10px;max-width:720px}
+    .field{display:grid;gap:6px}
+    .field label{font-weight:600;color:#2b3653}
+    [data-theme="dark"] .field label{color:#dbe6ff}
+    .input, .textarea{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--text)}
+    .textarea{min-height:110px;resize:vertical}
+    .status{color:var(--muted);min-height:20px}
 
     .shield svg{max-width:140px;display:block;margin:auto}
 
-    footer{padding:28px 0;color:var(--muted);border-top:1px solid var(--line);font-size:.9rem}
+    footer{padding:20px 0;color:var(--muted);border-top:1px solid var(--line);font-size:.9rem;background:linear-gradient(180deg,transparent,rgba(0,0,0,.02))}
     .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 
+    /* Floating CTA on mobile */
+    .fab{position:fixed;right:16px;bottom:16px;z-index:50;background:linear-gradient(135deg,var(--brand),var(--brand-600));color:#fff;border-radius:999px;padding:10px 14px;box-shadow:0 12px 24px rgba(34,103,230,.3)}
+    .fab svg{width:18px;height:18px;color:#fff}
+
     @media(max-width:960px){
-      .hero{grid-template-columns:1fr}
+      .hero{grid-template-columns:1fr;gap:22px}
       nav ul{display:none}
+      .menu-btn{display:inline-block}
+      .actions{gap:6px}
+      .cards{gap:10px}
+      .container{width:min(96%, var(--maxw))}
+      .split{grid-template-columns:1fr}
+      nav ul#menu.open{display:flex !important;position:absolute;top:52px;right:0;left:0;margin:0;padding:12px 12px;gap:10px;flex-direction:column;background:var(--bg);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:30}
     }
+  @media (prefers-reduced-motion: no-preference){ html{ scroll-behavior:smooth } }
   </style>
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <!-- Icon Symbols -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17 4 12"/></symbol>
+    <symbol id="i-bubble" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 5V5a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.08 3.18 2 2 0 0 1 4.06 1h3a2 2 0 0 1 2 1.72c.12.9.33 1.77.62 2.6a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.47-1.47a2 2 0 0 1 2.11-.45c.83.29 1.7.5 2.6.62A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22c4-2 8-5 8-10V5l-8-3-8 3v7c0 5 4 8 8 10"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" x2="21" y1="4" y2="4"/><line x1="4" x2="21" y1="12" y2="12"/><line x1="4" x2="21" y1="20" y2="20"/><circle cx="8" cy="4" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="12" cy="20" r="2"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2c3 4 3 16 0 20c-3-4-3-16 0-20z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-q" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 17v4M8 21h8"/></symbol>
+    <symbol id="i-wand" viewBox="0 0 24 24"><path d="M15 4l5 5M2 22l8-8M14 7l3 3M3 21l3-3"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M4.93 4.93 3.51 3.51M20.49 20.49l-1.42-1.42M4.93 19.07 3.51 20.49M20.49 3.51l-1.42 1.42"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  </svg>
+
   <header>
     <div class="container nav">
-      <a class="brand" href="#top">
-        <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 5V5a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M15 7v3a3 3 0 0 0 6 0V7l-3-2z"/></svg></span>
+      <a class="brand" href="#top" aria-label="Message ID+ Home">
+        <span class="logo" aria-hidden="true"><svg class="icon"><use href="#i-bubble"/></svg></span>
         Message ID+
       </a>
-      <nav>
-        <ul>
+      <nav aria-label="Primary navigation">
+        <button class="menu-btn" aria-controls="menu" aria-expanded="false" onclick="toggleMenu()">Menu</button>
+        <ul id="menu">
           <li><a href="#features">Features</a></li>
           <li><a href="#why">Why Us</a></li>
           <li><a href="#privacy">Privacy</a></li>
@@ -83,96 +211,142 @@
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
-      <div>
-        <a class="btn ghost" href="#privacy">🔒 Learn more</a>
-        <a class="btn primary" href="#contact">✉️ Get in touch</a>
+      <div class="actions">
+        <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Switch theme"><svg class="icon"><use href="#i-moon"/></svg></button>
+        <a class="btn ghost" href="#privacy"><svg class="icon" class="icon" width="18" height="18"><use href="#i-lock"/></svg> Learn more</a>
+        <a class="btn primary" href="#contact"><svg class="icon" class="icon" width="18" height="18"><use href="#i-mail"/></svg> Get in touch</a>
       </div>
     </div>
   </header>
 
-  <main class="container">
+  <main id="main" class="container">
     <section class="hero">
       <div>
-        <span class="badge">Privacy‑first · Blue by default</span>
+        <span class="badge">Privacy‑first · Built for clarity</span>
         <h1>Smarter Messages. Clearer Calls. Less Spam.</h1>
         <p class="subtitle">All in one: <strong>Messages</strong>, <strong>Caller Info</strong>, and <strong>Spam Block</strong>.</p>
-        <div class="bullet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Bills, deliveries, and codes highlighted instantly</div>
-        <div class="bullet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Caller hints before it rings</div>
-        <div class="bullet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Layered spam blocking with risk labels</div>
+        <div class="bullet"><svg class="icon"><use href="#i-check"/></svg> Bills, deliveries, and codes highlighted instantly</div>
+        <div class="bullet"><svg class="icon"><use href="#i-user"/></svg> Caller hints before it rings</div>
+        <div class="bullet"><svg class="icon"><use href="#i-shield"/></svg> Layered spam blocking with risk labels</div>
+        <div class="trust" aria-label="Trust badges">
+          <span class="pill"><svg class="icon"><use href="#i-lock"/></svg> Privacy‑first</span>
+          <span class="pill"><svg class="icon"><use href="#i-sliders"/></svg> No Ads</span>
+          <span class="pill"><svg class="icon"><use href="#i-bubble"/></svg> On‑device first</span>
+          <span class="pill"><svg class="icon"><use href="#i-check"/></svg> Encryption in transit</span>
+        </div>
       </div>
-      <aside class="device">
-        <div class="screen">
-          <div class="chip"><strong>Bill Assistant</strong><span class="tag">Message</span></div>
-          <div class="chip"><strong>Unknown: Courier</strong><span class="tag">Caller Info</span></div>
-          <div class="chip"><strong>Blocked: Telemarketing</strong><span class="tag">Spam Block</span></div>
+      <aside class="device" aria-label="Product preview">
+        <!-- Abstract illustration (no real screenshots) -->
+        <svg class="hero-art" viewBox="0 0 480 320" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0%" stop-color="#e9f1ff"/>
+              <stop offset="100%" stop-color="#f8fbff"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="480" height="320" fill="url(#g)"/>
+          <g opacity="0.6" stroke="#d6e6ff">
+            <path d="M0 220 C 120 180, 240 260, 480 200" fill="none"/>
+            <path d="M0 250 C 140 210, 240 280, 480 230" fill="none"/>
+          </g>
+        </svg>
+        <div class="screen" role="img" aria-label="Message ID+ interface overview">
+          <div class="chip"><strong><svg class="icon" width="18" height="18"><use href="#i-bubble"/></svg> Bill Assistant</strong><span class="tag">Message</span></div>
+          <div class="chip"><strong><svg class="icon" width="18" height="18"><use href="#i-user"/></svg> Unknown: Courier</strong><span class="tag">Caller Info</span></div>
+          <div class="chip"><strong><svg class="icon" width="18" height="18"><use href="#i-shield"/></svg> Blocked: Telemarketing</strong><span class="tag">Spam Block</span></div>
         </div>
       </aside>
+    </section>
+
+    <!-- How it works (no recording) -->
+    <section aria-labelledby="how-title" id="how">
+      <h2 id="how-title">How Protection Works</h2>
+      <p class="lead">Simple setup. Always‑on protection.</p>
+      <div class="steps">
+        <div class="step">
+          <h3><span class="num">1</span> Enable</h3>
+          <p><svg class="icon" width="18" height="18"><use href="#i-lock"/></svg> Grant Messages & Phone permissions; data stays on‑device.</p>
+        </div>
+        <div class="step">
+          <h3><span class="num">2</span> Detect</h3>
+          <p><svg class="icon" width="18" height="18"><use href="#i-wand"/></svg> Classify SMS content and caller intent in real time.</p>
+        </div>
+        <div class="step">
+          <h3><span class="num">3</span> Protect</h3>
+          <p><svg class="icon" width="18" height="18"><use href="#i-shield"/></svg> Block high‑risk spam, label calls, and highlight essentials.</p>
+        </div>
+      </div>
     </section>
 
     <section id="features">
       <h2>Core Features</h2>
       <p class="lead">Focused, fast, privacy‑respecting.</p>
-      <div class="cards">
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 5V5a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-          <h3>Smart Messages</h3>
-          <p>Instant highlights for bills, deliveries, OTPs.</p>
-          <p>Group related messages, pin critical info, and reduce clutter.</p>
+      <div class="features-list">
+        <div class="feature">
+          <span class="icon-circle"><svg class="icon"><use href="#i-bubble"/></svg></span>
+          <div>
+            <h3>Smart Messages</h3>
+            <p>Highlights bills, deliveries, OTPs; groups threads and pins essentials.</p>
+          </div>
         </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 8.5c0 7-10 11.5-10 11.5S2 15.5 2 8.5a10 10 0 0 1 20 0z"/><circle cx="12" cy="8.5" r="3"/></svg>
-          <h3>Caller Info</h3>
-          <p>Know the intent before you pick up.</p>
-          <p>Get predictive labels like “Courier” or “Bank” so you can decide instantly.</p>
+        <div class="feature">
+          <span class="icon-circle"><svg class="icon"><use href="#i-user"/></svg></span>
+          <div>
+            <h3>Caller Info</h3>
+            <p>Predictive labels like “Courier” or “Bank” so you can decide fast.</p>
+          </div>
         </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <h3>Spam Block</h3>
-          <p>Filters plus allow/deny lists.</p>
-          <p>Advanced AI + rules engine to stop scams, telemarketing, and fraud attempts.</p>
+        <div class="feature">
+          <span class="icon-circle"><svg class="icon"><use href="#i-shield"/></svg></span>
+          <div>
+            <h3>Spam Block</h3>
+            <p>AI + rules engine with allow/deny lists to stop scams and telemarketing.</p>
+          </div>
         </div>
       </div>
     </section>
 
     <section id="why">
       <h2>Why Choose Message ID+</h2>
-      <p class="lead">Not just another caller ID app—built for a safer, cleaner communication future.</p>
-      <div class="cards">
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <h3>Lightweight</h3>
-          <p>Designed to be battery‑friendly and smooth even on older devices.</p>
+      <div class="split">
+        <div class="points">
+          <div class="point"><svg class="icon"><use href="#i-user"/></svg><div><strong>Lightweight</strong><div class="muted">Smooth and battery‑friendly.</div></div></div>
+          <div class="point"><svg class="icon"><use href="#i-sliders"/></svg><div><strong>Customizable</strong><div class="muted">Tune blocking levels, lists, and notifications.</div></div></div>
+          <div class="point"><svg class="icon"><use href="#i-globe"/></svg><div><strong>Global Ready</strong><div class="muted">Multiple languages; regional formats.</div></div></div>
         </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M12 4H3"/><path d="M12 12h9"/><path d="M12 8H3"/><path d="M12 16H3"/></svg>
-          <h3>Customizable</h3>
-          <p>Adjust blocking levels, maintain lists, and tune notifications easily.</p>
-        </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <h3>Global Ready</h3>
-          <p>Supports multiple languages and adapts to regional formats.</p>
+        <div class="device" aria-label="Light device mock">
+          <div class="screen">
+            <div class="chip"><strong>Risk: Low</strong><span class="tag">Caller</span></div>
+            <div class="chip"><strong>Invoice #4721</strong><span class="tag">Message</span></div>
+            <div class="chip"><strong>Auto‑block: Scam</strong><span class="tag">Spam</span></div>
+          </div>
         </div>
       </div>
     </section>
 
     <section id="privacy">
       <h2>Security & Privacy</h2>
-      <div class="cards">
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-          <h3>Minimal Data</h3>
-          <p>Only what’s required to deliver features.</p>
+      <div class="privacy-timeline">
+        <div class="privacy-item">
+          <span class="icon-circle"><svg class="icon"><use href="#i-check"/></svg></span>
+          <div>
+            <h3>Minimal Data</h3>
+            <p>We only collect what’s required to deliver features.</p>
+          </div>
         </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <h3>Encryption</h3>
-          <p>Protected in transit with industry standards.</p>
+        <div class="privacy-item">
+          <span class="icon-circle"><svg class="icon"><use href="#i-lock"/></svg></span>
+          <div>
+            <h3>Encryption</h3>
+            <p>Protected in transit with industry standards.</p>
+          </div>
         </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l-2 4h4l-2 4"/></svg>
-          <h3>User Control</h3>
-          <p>Granular switches for blocking, notifications, and labeling.</p>
+        <div class="privacy-item">
+          <span class="icon-circle"><svg class="icon"><use href="#i-sliders"/></svg></span>
+          <div>
+            <h3>User Control</h3>
+            <p>Granular switches for blocking, notifications, and labeling.</p>
+          </div>
         </div>
       </div>
       <p class="lead">Read our <a href="https://bettermsg.github.io/privacy_policy.html" target="_blank" rel="noopener">Privacy Policy</a>.</p>
@@ -180,26 +354,182 @@
 
     <section id="faq">
       <h2>FAQ</h2>
-      <div class="cards">
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16h.01"/><path d="M12 8v4"/></svg>
-          <h3>Does it need internet?</h3>
+      <div class="faq">
+        <details class="faq-item" open>
+          <summary><svg class="faq-icon"><use href="#i-q"/></svg> Does it need internet?</summary>
           <p>Core functions run on‑device. Internet helps with updates and enhanced recognition.</p>
-        </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M8 7h.01"/><path d="M12 7h.01"/><path d="M16 7h.01"/><path d="M8 11h.01"/><path d="M12 11h.01"/><path d="M16 11h.01"/><path d="M8 15h.01"/><path d="M12 15h.01"/><path d="M16 15h.01"/></svg>
-          <h3>Do you read messages?</h3>
+        </details>
+        <details class="faq-item">
+          <summary><svg class="faq-icon"><use href="#i-bubble"/></svg> Do you read messages?</summary>
           <p>We process only the minimum required info with transparency and consent.</p>
-        </div>
-        <div class="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
-          <h3>Can I turn off blocking?</h3>
+        </details>
+        <details class="faq-item">
+          <summary><svg class="faq-icon"><use href="#i-check"/></svg> Can I turn off blocking?</summary>
           <p>Yes. Adjust levels, edit allow/deny lists, or disable rules anytime.</p>
-        </div>
+        </details>
       </div>
     </section>
 
     <section id="contact">
       <h2>Contact</h2>
-      <p class="lead">Email <a href="mailto:messageid.feeback@gmail.com">messageid.feeback@gmail.com</a> for partnerships and feedback.</p>
-     
+      <p class="lead">Fill the form or email <a href="mailto:messageid.feedback@gmail.com">messageid.feedback@gmail.com</a>.</p>
+      <form id="contact-form" class="form" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" class="input" type="text" placeholder="Your name" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" class="input" type="email" placeholder="you@example.com" required />
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" class="textarea" placeholder="Tell us how we can help" required></textarea>
+        </div>
+        <div class="status" id="form-status" role="status" aria-live="polite"></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn primary" type="submit">Send</button>
+          <button class="btn ghost" type="reset">Reset</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <a class="fab" href="#contact" aria-label="Contact us"><svg class="icon"><use href="#i-mail"/></svg></a>
+
+  <footer>
+    <div class="container foot">
+      <div>© <span id="year"></span> Message ID+ · BetterMsg</div>
+      <div><a href="#features">Features</a> · <a href="#why">Why Us</a> · <a href="#privacy">Privacy</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent=new Date().getFullYear();
+
+    // Mobile menu toggle
+    function toggleMenu(){
+      const btn=document.querySelector('.menu-btn');
+      const menu=document.getElementById('menu');
+      const open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded', String(!open));
+      menu.classList.toggle('open', !open);
+    }
+
+    // Theme toggle with persistence
+    const storageKey='theme';
+    const toggle=document.getElementById('theme-toggle');
+    const metaTheme=document.querySelector('meta[name="theme-color"]');
+    const prefersDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const saved=localStorage.getItem(storageKey);
+    const initialMode = saved || (prefersDark ? 'dark' : 'light');
+    if(saved){ document.documentElement.setAttribute('data-theme', saved); }
+    updateToggle(initialMode);
+    syncThemeColor(initialMode);
+
+    function updateToggle(mode){
+      if(!toggle) return;
+      const use=toggle.querySelector('use');
+      if(mode==='dark'){
+        use.setAttribute('href', '#i-sun');
+        toggle.setAttribute('aria-pressed','true');
+        toggle.setAttribute('aria-label','Switch to light');
+      }else{
+        use.setAttribute('href', '#i-moon');
+        toggle.setAttribute('aria-pressed','false');
+        toggle.setAttribute('aria-label','Switch to dark');
+      }
+    }
+    function syncThemeColor(mode){
+      if(!metaTheme) return;
+      metaTheme.content = (mode==='dark') ? '#060b1a' : '#ffffff';
+    }
+
+    toggle?.addEventListener('click', () => {
+      const current=document.documentElement.getAttribute('data-theme');
+      const next=current==='dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem(storageKey, next);
+      updateToggle(next);
+      syncThemeColor(next);
+    });
+
+    // Contact form
+    const form=document.getElementById('contact-form');
+    const statusEl=document.getElementById('form-status');
+
+    function validateEmail(email){
+      return email.includes('@') && email.split('@')[1] && email.split('@')[1].includes('.');
+    }
+
+    form?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name=form.name.value.trim();
+      const email=form.email.value.trim();
+      const msg=form.message.value.trim();
+      if(!name || !email || !msg){
+        statusEl.textContent='Please fill out all fields.';
+        return;
+      }
+      if(!validateEmail(email)){
+        statusEl.textContent='Please enter a valid email address.';
+        return;
+      }
+      const subject=encodeURIComponent('Message ID+ — Website Inquiry');
+      const body=encodeURIComponent(`Name: ${name}
+Email: ${email}
+
+${msg}`);
+      window.location.href=`mailto:messageid.feedback@gmail.com?subject=${subject}&body=${body}`;
+      statusEl.textContent='Opening your email app…';
+      form.reset();
+    });
+
+    // Nav highlight with IntersectionObserver
+    const ids=['features','why','privacy','faq','contact'];
+    const sections=ids.map(id=>document.getElementById(id)).filter(Boolean);
+    const linkMap=new Map(Array.from(document.querySelectorAll('nav a[href^="#"]')).map(a=>[a.getAttribute('href').slice(1),a]));
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(!entry.isIntersecting) return;
+        const id=entry.target.id;
+        const link=linkMap.get(id);
+        if(!link) return;
+        linkMap.forEach(a=>a.removeAttribute('aria-current'));
+        link.setAttribute('aria-current','true');
+      });
+    },{rootMargin:'-40% 0px -55% 0px',threshold:0.01});
+    sections.forEach(sec=>io.observe(sec));
+
+    // close mobile menu when clicking a link or pressing Esc
+    document.querySelectorAll('#menu a').forEach(a=>{
+      a.addEventListener('click',()=>{
+        if(window.matchMedia('(max-width:960px)').matches){
+          document.querySelector('.menu-btn')?.setAttribute('aria-expanded','false');
+          document.getElementById('menu')?.classList.remove('open');
+        }
+      });
+    });
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='Escape'){
+        document.querySelector('.menu-btn')?.setAttribute('aria-expanded','false');
+        document.getElementById('menu')?.classList.remove('open');
+      }
+    });
+  </script>
+
+  <!-- FAQ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "Does it need internet?", "acceptedAnswer": {"@type":"Answer","text":"Core functions run on-device. Internet helps with updates and enhanced recognition."}},
+      {"@type": "Question", "name": "Do you read messages?", "acceptedAnswer": {"@type":"Answer","text":"We process only the minimum required info with transparency and consent."}},
+      {"@type": "Question", "name": "Can I turn off blocking?", "acceptedAnswer": {"@type":"Answer","text":"Yes. Adjust levels, edit allow/deny lists, or disable rules anytime."}}
+    ]
+  }
+  </script>
+</body>
+</html>
