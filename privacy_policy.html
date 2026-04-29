@@ -3,27 +3,67 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Message ID+ — Privacy Policy</title>
-  <meta name="description" content="Privacy Policy for Message ID+ (messaging, caller ID, spam blocking)." />
+  <title>Message ID+ - Privacy Policy</title>
+  <meta name="description" content="Privacy Policy for Message ID+ messaging, caller ID, and spam protection features." />
   <style>
-    /* Minimal, readable, blue-accent */
-    :root{
-      --ink:#111;         /* 主文字 */
-      --muted:#555;       /* 次要文字 */
-      --line:#e6e6e6;     /* 分隔线 */
-      --brand:#1f5fd6;    /* 蓝色主色（仅用于标题） */
-      --bg:#ffffff;
+    :root {
+      --ink: #111111;
+      --muted: #555555;
+      --line: #e6e6e6;
+      --brand: #1f5fd6;
+      --bg: #ffffff;
     }
-    html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    .wrap{max-width:860px;margin:0 auto;padding:32px 16px}
-    h1{font-size:24px;margin:0 0 6px;color:var(--brand)}
-    h2{font-size:18px;margin:24px 0 8px;color:var(--brand)}
-    p{margin:10px 0}
-    ul{margin:8px 0 8px 20px}
-    .meta{font-size:14px;color:var(--muted);margin-bottom:14px}
-    hr{border:0;border-top:1px solid var(--line);margin:20px 0}
-    .small{font-size:13px;color:var(--muted)}
-    /* 保持极简，不使用装饰性背景与按钮 */
+
+    html,
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0 0 6px;
+      color: var(--brand);
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 24px 0 8px;
+      color: var(--brand);
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    ul {
+      margin: 8px 0 8px 20px;
+    }
+
+    .meta {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin: 20px 0;
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -33,97 +73,124 @@
       Effective Date: 2025-09-25 &nbsp; | &nbsp; Last Updated: 2025-09-25
     </div>
     <p>
-      This Privacy Policy explains how <strong>Message ID+</strong> (“the App”, “we”, “our”, “us”) collects, uses,
-      and safeguards information when you use messaging, caller identification, and spam blocking features.
+      This Privacy Policy explains how <strong>Message ID+</strong> ("the App", "we", "our", "us") accesses,
+      collects, uses, transmits, stores, shares, and safeguards information when you use messaging, caller
+      identification, spam detection, spam blocking, and related features.
     </p>
     <hr>
 
     <h2>1. Scope</h2>
     <p>
-      This Policy applies to all features of the App, including messaging, caller information, spam blocking,
-      in-app settings, diagnostics, and customer support.
+      This Policy applies to all features of the App, including messaging, caller information, spam detection,
+      spam blocking, number lookup, in-app settings, diagnostics, and customer support.
     </p>
 
-    <h2>2. Permissions and Purpose (Android)</h2>
-    <p>We request only the minimum permissions necessary to provide core functionality. You can revoke any permission in your device settings at any time.</p>
+    <h2>2. Permissions and Feature Access</h2>
+    <p>
+      We request only the access needed to provide the features you choose to use. You can revoke access in your
+      device settings at any time, but some features may stop working properly.
+    </p>
     <ul>
-      <li><strong>Phone / Call Log:</strong> Identify incoming callers, detect spam, and show call details. Processed on device; no call audio is recorded.</li>
-      <li><strong>SMS / MMS:</strong> Send/receive messages and filter spam texts. Message content and attachments remain on your device unless you explicitly share or back up.</li>
-      <li><strong>Contacts:</strong> Display names/avatars and enable group messaging. Read on device only; not stored on our servers.</li>
-      <li><strong>Notifications:</strong> Show incoming call/message alerts and actions. Handled locally on device.</li>
-      <li><strong>Storage (Media Access):</strong> Allow attaching media to messages or exporting logs you choose to save. Files remain under your control.</li>
+      <li><strong>Phone State Access:</strong> Used to detect call status so call-related features can work properly during incoming and outgoing calls.</li>
+      <li><strong>Display Over Other Apps:</strong> Used to display after-call screens and related actions after a call ends.</li>
+      <li><strong>Caller ID and Spam Protection Access:</strong> If you enable caller identification or spam protection features, the App may process phone numbers related to calls to identify callers, detect suspected spam, and show available caller details such as carrier or general location where supported.</li>
+      <li><strong>Messaging Access:</strong> If you choose to use Message ID+ for messaging features, the App may access SMS and MMS-related data to send, receive, display, organize, and manage messages.</li>
+      <li><strong>Contacts Access:</strong> If granted, used to match phone numbers with contact names and profile details stored on your device.</li>
+      <li><strong>Notifications:</strong> Used to show message and caller-related alerts and actions on your device.</li>
+      <li><strong>Storage or Media Access:</strong> If granted, used only when you choose to attach, save, import, or export media or files.</li>
     </ul>
 
     <h2>3. Information We Collect</h2>
     <ul>
-      <li><strong>Device & App Diagnostics:</strong> Device model, OS version, app version, performance metrics, and crash logs for reliability and troubleshooting.</li>
-      <li><strong>Caller ID & Spam Protection:</strong> Call metadata (number, time, duration) to identify unknown callers and detect spam/fraud; spam reports you submit may be used in anonymized form to improve protection.</li>
-      <li><strong>Messaging:</strong> SMS/MMS content and attachments are processed locally to deliver messages and filter spam.</li>
-      <li><strong>Support Communications:</strong> If you contact us, we receive your email address and the content of your message to provide support.</li>
+      <li><strong>Phone Numbers and Call-Related Data:</strong> If caller identification, spam detection, spam blocking, or number lookup features are enabled, we may collect and transmit incoming, outgoing, missed, or searched phone numbers, together with related call metadata such as call time and call status, to provide caller identification, spam detection, spam blocking, and caller detail lookup.</li>
+      <li><strong>SMS and MMS-Related Data:</strong> If you choose to use Message ID+ for messaging features, the App may access SMS and MMS-related data needed to send, receive, display, organize, and manage messages. If message spam protection is enabled, related message data may also be processed to detect suspected spam.</li>
+      <li><strong>Contacts Data:</strong> If you grant contacts access, the App may read contact names and phone numbers stored on your device to display names, improve caller matching, and support messaging features.</li>
+      <li><strong>Diagnostics Data:</strong> We may collect device model, operating system version, app version, crash logs, and performance information to maintain, troubleshoot, secure, and improve the App.</li>
+      <li><strong>Support Communications:</strong> If you contact us, we receive the information you provide, such as your email address and message content, to respond to your request.</li>
     </ul>
 
     <h2>4. How We Use Information</h2>
     <ul>
-      <li>Provide messaging, caller information, and spam blocking.</li>
-      <li>Detect, prevent, and respond to spam, fraud, abuse, and security incidents.</li>
-      <li>Maintain, analyze, and improve app performance and reliability.</li>
+      <li>Provide caller identification, spam detection, spam blocking, number lookup, and related caller information features.</li>
+      <li>Provide messaging features, including sending, receiving, displaying, and managing SMS and MMS messages.</li>
+      <li>Match phone numbers with available caller details, such as contact name, carrier, or general location information where supported.</li>
+      <li>Detect, prevent, and respond to spam, fraud, abuse, and security issues.</li>
+      <li>Maintain, analyze, troubleshoot, and improve app performance and reliability.</li>
       <li>Respond to inquiries and provide customer support.</li>
-      <li>Comply with applicable laws and enforce our terms.</li>
+      <li>Comply with applicable law and enforce our terms and policies.</li>
     </ul>
 
     <h2>5. Data Sharing and Disclosure</h2>
-    <p><strong>We do not sell, rent, or trade your personal data.</strong> Data may be disclosed only when:</p>
+    <p><strong>We do not sell phone numbers, message content, contact data, or other personal data, and we do not use phone numbers collected for caller identification or spam protection for advertising.</strong></p>
+    <p>We may share or disclose data only in the following circumstances:</p>
     <ul>
-      <li><strong>Service Providers:</strong> Trusted vendors process data on our behalf under confidentiality and data-processing obligations.</li>
-      <li><strong>Legal Requirements:</strong> Required by law, regulation, legal process, or government request.</li>
-      <li><strong>Security and Safety:</strong> Necessary to detect, prevent, or address fraud, abuse, or technical issues.</li>
+      <li><strong>Service Providers:</strong> We may share relevant data with trusted vendors or infrastructure providers that help us operate caller identification, spam detection, diagnostics, hosting, or support services, subject to contractual confidentiality and data protection obligations.</li>
+      <li><strong>Legal Requirements:</strong> We may disclose data if required to do so by law, regulation, legal process, or lawful government request.</li>
+      <li><strong>Security and Safety:</strong> We may disclose data where necessary to investigate, prevent, or address fraud, spam, abuse, technical issues, or security incidents.</li>
+      <li><strong>Business Transfers:</strong> If permitted by applicable law, data may be transferred as part of a merger, acquisition, financing, or sale of assets, subject to appropriate safeguards.</li>
     </ul>
 
-    <h2>6. Security</h2>
+    <h2>6. How We Use Phone Numbers</h2>
+    <p>
+      If caller identification, spam detection, spam blocking, or number lookup features are enabled, Message ID+
+      may collect and transmit phone numbers related to incoming calls, outgoing calls, missed calls, or numbers
+      you search for to our servers.
+    </p>
+    <p>We use these phone numbers only to:</p>
     <ul>
-      <li>Data in transit is protected with industry-standard encryption (HTTPS/TLS).</li>
-      <li>Sensitive data such as messages, contacts, and call content is stored on your device by default.</li>
-      <li>We apply technical and organizational measures to reduce risks of unauthorized access, loss, or misuse.</li>
+      <li>identify callers;</li>
+      <li>detect or help block suspected spam or scam calls;</li>
+      <li>look up caller details such as carrier or general location where supported; and</li>
+      <li>improve the accuracy of caller identification and spam protection services.</li>
+    </ul>
+    <p>Phone numbers transmitted for these features are used only when these features are enabled and are not used for advertising.</p>
+
+    <h2>7. Security</h2>
+    <ul>
+      <li>Data in transit is protected with industry-standard encryption such as HTTPS/TLS where applicable.</li>
+      <li>Sensitive data such as messages, contacts, and local settings is stored on your device by default unless access, processing, or transmission is required to provide a feature you choose to use.</li>
+      <li>We apply technical and organizational measures designed to reduce risks of unauthorized access, loss, misuse, or disclosure.</li>
     </ul>
 
-    <h2>7. Data Retention and Deletion</h2>
+    <h2>8. Data Retention and Deletion</h2>
     <ul>
-      <li>On-device data remains until you delete it or uninstall the App.</li>
-      <li>Diagnostic logs (if collected) are retained only as long as needed for troubleshooting and service quality.</li>
-      <li>You may request deletion of information you shared with support via the contact listed below.</li>
+      <li>On-device data, such as messages, contacts matched on device, and local settings, remains on your device until you delete it or uninstall the App.</li>
+      <li>Server-side data, including phone numbers and related call lookup data processed for caller identification or spam detection, is retained only for as long as reasonably necessary to provide, secure, improve, and troubleshoot those features, unless a longer retention period is required by law.</li>
+      <li>Diagnostic logs are retained only as long as needed for troubleshooting, service quality, and security purposes.</li>
+      <li>You may contact us to request deletion of information you submitted directly to support, subject to legal and operational requirements.</li>
     </ul>
 
-    <h2>8. Your Rights and Choices</h2>
+    <h2>9. Your Rights and Choices</h2>
     <ul>
       <li>Manage and revoke app permissions in device settings at any time.</li>
-      <li>Where available, disable analytics/diagnostics within the App settings.</li>
+      <li>Where available, disable optional features within the App settings.</li>
       <li>Access, correct, or request deletion of support communications by contacting us.</li>
     </ul>
 
-    <h2>9. Third-Party Services</h2>
+    <h2>10. Third-Party Services</h2>
     <p>
-      The App may integrate trusted third-party services (e.g., diagnostics or crash reporting). Such providers process
-      data under their own privacy policies and applicable data-protection laws.
+      The App may integrate trusted third-party services such as diagnostics, crash reporting, hosting, or support
+      tools. Such providers process data under their own privacy policies and applicable data-protection laws.
     </p>
 
-    <h2>10. Children’s Privacy</h2>
+    <h2>11. Children's Privacy</h2>
     <p>
-      The App is not directed to children under 13 (or the minimum age in your jurisdiction).
-      We do not knowingly collect personal data from children. If we learn such data was collected, we will delete it promptly.
+      The App is not directed to children under 13, or the minimum age in your jurisdiction. We do not knowingly
+      collect personal data from children. If we learn such data was collected, we will delete it promptly.
     </p>
 
-    <h2>11. Changes to This Policy</h2>
+    <h2>12. Changes to This Policy</h2>
     <p>
-      We may update this Policy from time to time. The “Last Updated” date above reflects the latest changes.
-      Material changes will be communicated within the App or on this page.
+      We may update this Policy from time to time. The "Last Updated" date above reflects the latest changes.
+      Material changes will be communicated within the App or on this page where appropriate.
     </p>
 
-    <h2>12. Contact Us</h2>
+    <h2>13. Contact Us</h2>
     <p>
       For questions or requests related to this Policy or your data, contact: messageid.feedback@gmail.com
     </p>
 
-    <hr>
+    <hr />
     <p class="small">© 2025 Message ID+. All rights reserved.</p>
   </main>
 </body>
